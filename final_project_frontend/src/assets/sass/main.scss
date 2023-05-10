@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer general {
+  body {
+    @apply p-0 m-0 text-dark;
+    scroll-behavior: smooth;
+  }
+  
+  section {
+    @apply bg-dark p-6 text-light;
+  }
+
+}
+
+@layer components {  
+  .arrow-up {
+    @apply w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-8 border-b-light;
+  }
+
+  .arrow-down {
+    @apply w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-light;
+  }
+
+  .arrow-left {
+    @apply w-0 h-0 border-b-8 border-b-transparent border-t-8 border-t-transparent border-r-8 border-r-light;
+  }
+
+  .arrow-right {
+    @apply w-0 h-0 border-b-8 border-b-transparent border-t-8 border-t-transparent border-l-8 border-l-light;
+  }
+
+  .button {
+    @apply border-2 border-secondary px-4 py-2 rounded text-sm md:text-lg w-fit hover:bg-secondary hover:text-light;
+  }
+}
