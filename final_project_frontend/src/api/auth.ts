@@ -2,8 +2,6 @@ import { AxiosResponse } from "axios";
 import axiosInstance from "./axios";
 
 function Login(email: string, password: string): Promise<AxiosResponse> {
-    console.log("hola");
-    
   return axiosInstance().post("/auth/login", { email, password });
 }
 

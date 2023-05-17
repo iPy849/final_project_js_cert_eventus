@@ -7,14 +7,13 @@
     <!-- Zona gris -->
     <div class="absolute top-0 left-0 w-full h-full bg-faded_gray -z-10"></div>
 
-    <!-- Zona de elementos -->
-    <div id="overlay" v-if="!appStore.isLoading"></div>
-
     <!-- Loader -->
     <div v-if="appStore.isLoading" class="grid place-items-center">
-      <p class="text-3xl text-dark">Cargando</p>
+      <p class="text-3xl text-dark">Por favor espere...</p>
       <LoaderComponent />
     </div>
+    <!-- Zona de elementos -->
+    <div id="overlay" v-show="!appStore.isLoading"></div>
   </aside>
 
   <NavBarComponent :brandName="getAppName" />

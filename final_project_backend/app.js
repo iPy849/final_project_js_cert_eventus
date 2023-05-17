@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require('cors')
 const cliArgs = require("./appSetup.js");
 const authEndpoint = require("./routes/auth.js");
+const user = require("./routes/user.js");
 const middlewares = require("./middlewares");
 const { checkSchema } = require("express-validator")
 const validators = require("./validators");
@@ -34,6 +35,13 @@ app.get("/", (req, res) => {
 app.post("/auth/login", checkSchema(validators.loginValidator()), authEndpoint.login);
 app.post("/auth/register", checkSchema(validators.loginValidator()), authEndpoint.register);
 app.post("/auth/recover", checkSchema(validators.emailValidation()), authEndpoint.recoverEmail);
+
+app.post(
+  "/user/bind-new-user",
+  middlewares.jwtProtected,
+  checkSchema(validators.notEmptyValidator("name", "lastName", "nickname", "birthday")), 
+  user.bindNewUser
+);
 app.use(middlewares.notFound);
 
 // Server

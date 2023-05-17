@@ -22,7 +22,7 @@
     <template #body v-if="componentView === 'login'">
       <form
         @submit.prevent="sendLoginForm"
-        class="flex flex-col items-center gap-2 p-2"
+        class="form"
       >
         <span>
           <label for="loginFormEmail">Correo</label>
@@ -46,7 +46,7 @@
         </span>
         <button type="submit" class="button">Ingresar</button>
         <div v-if="loginError" class="p-2 bg-red text-light">
-            {{ loginError }}
+          {{ loginError }}
         </div>
       </form>
       <div class="flex items-center justify-around">
@@ -68,7 +68,7 @@
     <template #body v-if="componentView === 'register'">
       <form
         @submit.prevent="sendRegisterForm"
-        class="flex flex-col items-center gap-2 p-2"
+        class="form"
       >
         <span>
           <label for="registerEmailForm">Correo</label>
@@ -102,7 +102,7 @@
         </span>
         <button type="submit" class="button">Registrar</button>
         <div v-if="registerError" class="p-2 bg-red text-light">
-            {{ registerError }}
+          {{ registerError }}
         </div>
       </form>
       <div class="flex items-center justify-around">
@@ -124,7 +124,7 @@
     <template #body v-if="componentView === 'recover'">
       <form
         @submit.prevent="sendRecoverForm"
-        class="flex flex-col items-center gap-2 p-2"
+        class="form"
       >
         <span>
           <label for="recoverEmailForm">Correo</label>
@@ -190,30 +190,33 @@ export default defineComponent({
       this.appStore.showSpinner();
       authApi
         .Login(this.loginEmailForm, this.loginPasswordForm)
-        .then((response: Object) => {            
-            utils.SetAuthToken(response.data.token);
-            this.appStore.closeSpinner();
-            this.$router.push({ name: "App" });
+        .then((response: Object) => {
+          utils.SetAuthToken(response.data.token);
+          this.appStore.closeSpinner();
+          this.$router.push({ name: "App" });
         })
         .catch((err: Object) => {
-            this.loginError = "Usuario o contraseña incorrectos";
-            this.appStore.closeOnlySpinner();
-            this.appStore.openOverlay();
+          this.loginError = "Usuario o contraseña incorrectos";
+          this.appStore.closeOnlySpinner();
         });
     },
     sendRegisterForm() {
+      if (this.registerPasswordForm !== this.registerRepeatPasswordForm){
+        this.registerError = "Los campos de contraseña deben coincidir";
+        return;
+      }
       this.appStore.showSpinner();
       authApi
-        .Login(this.loginEmailForm, this.loginPasswordForm)
+        .Register(this.loginEmailForm, this.loginPasswordForm)
         .then((response: Object) => {
-            if (response.status === 200){
-                utils.SetAuthToken(response.data.token);
-                this.$router.push({ name: "UserSetup" });
-                this.appStore.closeSpinner();
-            } else {
-                this.registerError = `El usuario ${this.registerEmailForm} ya existe`;
-                this.appStore.closeSpinner();
-            }
+          utils.SetAuthToken(response.data.token);
+          
+          this.$router.push({ name: "UserSetup" });
+          this.appStore.closeSpinner();
+        })
+        .catch((err: Object) => {
+          this.registerError = `Ya existe un usuario registrado con el correo ${this.registerEmailForm}`;
+          this.appStore.closeOnlySpinner();
         });
     },
     sendRecoverForm() {
@@ -223,22 +226,3 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss">
-@layer loginForm {
-  form {
-    & > span {
-      @apply w-full;
-
-      label {
-        @apply font-bold;
-      }
-
-      & > input {
-        @apply w-full rounded;
-        outline: none !important;
-        padding: 0.5rem !important;
-      }
-    }
-  }
-}
-</style>

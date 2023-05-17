@@ -14,5 +14,7 @@ module.exports = {
       blue: "#576CA8",
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 }

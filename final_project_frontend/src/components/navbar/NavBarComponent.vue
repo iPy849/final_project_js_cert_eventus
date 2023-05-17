@@ -45,9 +45,17 @@
 
         <!-- User -->
         <NavBarUserComponent v-if="userStore.isAuthenticated" :user-name="user" class="hidden md:flex" />
-
+        <!-- Sub navigation -->
+        <section v-if="userStore.isAuthenticated" class="bg-secondary p-3 hidden md:block">
+          <ul class="flex gap-4 text-light underline text-sm">
+            <li>Mis boletos</li>
+            <li>Mis eventos</li>
+            <li>Se acerca el día para...</li>
+            <li>Próximos eventos</li>
+          </ul>
+        </section>
         <!-- No user navbar -->
-        <nav class="w-fit" v-if="!userStore.isAuthenticated">
+        <nav class="w-fit" v-else>
           <ul class="list-none flex items-center gap-4 text-base">
             <li class="flex items-center gap-2">
               <a href="#nextEvents">Próximos eventos</a>
@@ -71,15 +79,6 @@
     </section>
 
 
-    <!-- Sub navigation -->
-    <section v-if="userStore.isAuthenticated" class="bg-secondary p-3 hidden md:block">
-      <ul class="flex gap-4 text-light underline text-sm">
-        <li>Mis boletos</li>
-        <li>Mis eventos</li>
-        <li>Se acerca el día para...</li>
-        <li>Próximos eventos</li>
-      </ul>
-    </section>
   </header>
 </template>
 
@@ -114,7 +113,7 @@ export default defineComponent({
       this.$data.searchParams = '';
     },
     OpenLoginModal() {
-      this.appStore.$patch({overlayOpen: true});
+      this.appStore.openOverlay();
       this.isLoginModalOpen = !this.isLoginModalOpen;
     },
   },

@@ -13,7 +13,6 @@ function SetAuthToken(rawToken: string): Object {
   const cookie = `${
     import.meta.env.VITE_AUTH_COOKIE_NAME
   }=${rawToken}; Max-Age=${needToPersistInSecs}`;
-  console.log(cookie);
   document.cookie = cookie;
   return token;
 }
@@ -24,11 +23,11 @@ function GetAuthToken(): string | null {
       .split(";")
       .filter((v: string) =>
         v.trim().startsWith(import.meta.env.VITE_AUTH_COOKIE_NAME)
-      );
+      );      
     let bearer = splittedCookies.length !== 0 ? splittedCookies[0] : null;
   
-    if (bearer !== null) {
-      return bearer.match(/(?<=bearer=)\w+/g)![0];
+    if (bearer !== null) {      
+      return bearer.match(/(?<=bearer=)(.*)/g)![0];
     }
     return null;
   }
@@ -37,6 +36,8 @@ function GetAuthObjectToken(): Object | null {
     const token = GetAuthToken();
     return token ? jwt_decode(token) as IJWTToken : null;
 }
+
+// TODO: Hacer función de borrar cookie
 
 export default {
     SetAuthToken,

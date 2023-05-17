@@ -9,11 +9,6 @@ export default function CreateAxiosInstance(): AxiosInstance {
     if(authToken){
         headers.Authorization = authToken;
     }
-    console.log({
-        baseURL: import.meta.env.VITE_BACKEND_BASE_URL,
-        timeout: parseInt(import.meta.env.VITE_AXIOS_REQUEST_TIMEOUT),
-        headers
-    });
     
     return axios.create({
         baseURL: import.meta.env.VITE_BACKEND_BASE_URL,

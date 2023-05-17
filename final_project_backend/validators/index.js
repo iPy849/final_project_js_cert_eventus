@@ -26,6 +26,16 @@ function passwordValidation(){
     };
 }
 
+function notEmptyValidator(...fields){
+    const validation = {};
+    fields.forEach(field => {
+        validation[field] = {
+            notEmpty: true,
+        };
+    });
+    return validation;
+}
+
 function loginValidator(){
     return {
         ...emailValidation(),
@@ -37,4 +47,5 @@ function loginValidator(){
 module.exports = {
     emailValidation,
     loginValidator,
+    notEmptyValidator,
 };

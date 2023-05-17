@@ -28,7 +28,7 @@ module.exports = function SwaggerSetuo(app) { // Swagger
     const options = {
         swaggerDefinition,
         // Paths to files containing OpenAPI definitions
-        apis: ['./routes/*.js']
+        apis: ['./routes/*.js'],
     };
 
     const swaggerSpec = swaggerJSDoc(options);
