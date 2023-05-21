@@ -27,3 +27,9 @@ export interface IUser {
     isActive: Boolean,
     imageUrl: String,
 }
+
+export interface IJWTToken {
+    id: string,
+    iat: number,
+    exp: number
+}

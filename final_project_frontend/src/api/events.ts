@@ -1,5 +1,4 @@
-import { axiosInstance } from '.'
-import { IEvent } from './types'
+import { IEvent } from '@/types'
 
 function GetHottestEvent(): IEvent {
     // axiosInstance.get()

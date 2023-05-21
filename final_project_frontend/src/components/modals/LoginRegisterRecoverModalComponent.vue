@@ -158,7 +158,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import authApi from "@/api/auth";
-import utils from "@/utils";
 import controlStateMixin from "@/mixins/controlStateMixin.ts";
 import ModalComponent from "@/components/generic/ModalComponent.vue";
 
@@ -191,14 +190,13 @@ export default defineComponent({
       authApi
         .Login(this.loginEmailForm, this.loginPasswordForm)
         .then((response: Object) => {
-          utils.SetAuthToken(response.data.token);
-          this.appStore.closeSpinner();
+          this.userStore.setUser(response.data.token);
           this.$router.push({ name: "App" });
         })
         .catch((err: Object) => {
           this.loginError = "Usuario o contraseña incorrectos";
-          this.appStore.closeOnlySpinner();
-        });
+        })
+        .finally(() => this.appStore.closeSpinner());
     },
     sendRegisterForm() {
       if (this.registerPasswordForm !== this.registerRepeatPasswordForm){
@@ -209,15 +207,13 @@ export default defineComponent({
       authApi
         .Register(this.loginEmailForm, this.loginPasswordForm)
         .then((response: Object) => {
-          utils.SetAuthToken(response.data.token);
-          
+          this.userStore.setUser(response.data.token);          
           this.$router.push({ name: "UserSetup" });
-          this.appStore.closeSpinner();
         })
         .catch((err: Object) => {
           this.registerError = `Ya existe un usuario registrado con el correo ${this.registerEmailForm}`;
-          this.appStore.closeOnlySpinner();
-        });
+        })
+        .finally(() => this.appStore.closeSpinner());
     },
     sendRecoverForm() {
       this.appStore.showSpinner();

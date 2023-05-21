@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useUserStore } from '@/stores';
 
 const routes = [
   {
@@ -20,6 +21,9 @@ const routes = [
     path: "/app",
     name: "App",
     component: () => import("@/views/app/mainView.vue"),
+    children: [
+
+    ],
   },
   {
     path: '/:pathMatch(.*)*',
@@ -32,4 +36,21 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+router.beforeEach((to) => {
+  const userStore = useUserStore();
+
+  if(to.name === "Landing" && userStore.authToken){
+    return {name: "App"};
+  }
+
+  // Path protegidos
+  const protectedPath = ["/app", "/user-setup"];
+  let isProtectedPath = false;
+  protectedPath.forEach((path: string) => isProtectedPath = isProtectedPath || to.fullPath.includes(path));
+  if(isProtectedPath && !userStore.authToken){
+    return {name: "Landing"}
+  }
+})
+
 export default router;

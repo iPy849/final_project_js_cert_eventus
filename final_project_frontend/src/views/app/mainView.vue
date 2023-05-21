@@ -1,14 +1,10 @@
 <template>
     <section>
-        <h2 class="text-center text-3xl mb-4 text-light font-bold">Sección I</h2>
+        <h2 class="text-center text-3xl mb-4 text-light font-bold">Se acerca el día para...</h2>
         <EventResultsComponent :eventList="mockData" />
     </section>
     <section>
-        <h2 class="text-center text-3xl mb-4 text-light font-bold">Sección II</h2>
-        <EventResultsComponent :eventList="mockData" />
-    </section>
-    <section>
-        <h2 class="text-center text-3xl mb-4 text-light font-bold">Sección III</h2>
+        <h2 class="text-center text-3xl mb-4 text-light font-bold">Próximos eventos:</h2>
         <EventResultsComponent :eventList="mockData" />
     </section>
 </template>

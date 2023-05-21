@@ -80,8 +80,6 @@ const login = async (req, res) => {
  *                      type: string
  *                    password:
  *                      type: string
- *                    isHost:
- *                      type: boolean
  *        responses:
  *          200:
  *            description: Usuario creado y autorizado
@@ -107,14 +105,9 @@ const register = async (req, res) => {
   if (!errs.isEmpty()) {
     return res.send({ errors: errs.array() });
   }
-  if (!req.body.isHost) {
-    req.body.isHost = false;
-  }
-  const { email, isHost } = req.body;
+  const { email } = req.body;
   let password = req.body.password;
   password = bcrypt.hashSync(password);
-
-  console.log({ email, password, isHost });
 
   const mongo = await getMongoConnection();
   if ((await mongo.collection("Users").countDocuments({ email })) !== 0) {
@@ -125,7 +118,7 @@ const register = async (req, res) => {
 
   const data = await mongo
     .collection("Users")
-    .insertOne({ email, password, isHost });
+    .insertOne({ email, password });
   const token = GenerateToken(data.insertedId);
   return res.json({ token });
 };

@@ -12,7 +12,8 @@
             max-w-[10rem]
             rounded-sm
         "
-        @click="isUserOptionOpen = !isUserOptionOpen">
+        @click="isUserOptionOpen = !isUserOptionOpen"
+    >
         <div>
             <!-- TODO: Ajustar una imagen acá o ícono -->
             <Icon class="w-auto h-6" icon="tabler:user-circle" />
@@ -45,7 +46,7 @@
           </div>
           <div>
               <p class="hover:bg-gray rounded m-2">Administrar opciones de usuario</p>
-              <p class="hover:bg-gray rounded m-2">Cerrar sesión</p>
+              <p class="hover:bg-gray rounded m-2" @click="logout">Cerrar sesión</p>
           </div>
         </div>
     </div>
@@ -53,9 +54,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import controlStateMixin from "@/mixins/ControlStateMixin";
 import { Icon } from "@iconify/vue";
 export default defineComponent({
     components: { Icon },
+    mixins: [controlStateMixin],
     props: {
         userName: {
             type: String,
@@ -65,6 +68,12 @@ export default defineComponent({
     data() {
         return {
             isUserOptionOpen: false,
+        }
+    },
+    methods: {
+        logout() {
+            this.userStore.deleteUser();
+            this.$router.push({name: "Landing"});
         }
     }
 

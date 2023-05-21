@@ -1,12 +1,12 @@
 import jwt_decode from "jwt-decode";
 
-interface IJWTToken {
+export interface IJWTToken {
     id: string,
     iat: number,
     exp: number
 }
 
-function SetAuthToken(rawToken: string): Object {
+function SetAuthToken(rawToken: string): IJWTToken {
   const token = jwt_decode(rawToken) as IJWTToken;
   const currentEpoch = new Date(Date.now()).getTime() / 1000;
   const needToPersistInSecs = token.exp - currentEpoch;
@@ -32,7 +32,7 @@ function GetAuthToken(): string | null {
     return null;
   }
 
-function GetAuthObjectToken(): Object | null {
+function GetAuthObjectToken(): IJWTToken | null {
     const token = GetAuthToken();
     return token ? jwt_decode(token) as IJWTToken : null;
 }

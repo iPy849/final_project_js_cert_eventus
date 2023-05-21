@@ -1,8 +1,11 @@
 const express = require("express");
+const bodyParser = require('body-parser')
+const multer = require('multer') // v1.0.5
 const cors = require('cors')
 const cliArgs = require("./appSetup.js");
 const authEndpoint = require("./routes/auth.js");
-const user = require("./routes/user.js");
+const userEndpoint = require("./routes/user.js");
+const viewEndpoint = require("./routes/view.js");
 const middlewares = require("./middlewares");
 const { checkSchema } = require("express-validator")
 const validators = require("./validators");
@@ -17,30 +20,47 @@ var corsOptions = {
 }
 
 // Built-in middlewares
-app.use(express.json());
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
+app.use(bodyParser.json()) // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(cors(corsOptions))
 
+// Multer for multipart/form auto file uploads
+const storage = multer.diskStorage({
+  destination: function (_, _, cb) {
+    cb(null, process.env.MEDIA_PATH)
+  },
+  filename: function (_, file, cb) {
+    const uniqueSuffix = Date.now();
+    cb(null, `${uniqueSuffix}_${file.originalname}`)
+  }
+})
+const upload = multer({ storage: storage })
+
+// Static files
+app.use("/media", express.static('uploads'))
 
 // Routes
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-// app.get("/auth", middlewares.jwtProtected, authEndpoint.checkUser);
 app.post("/auth/login", checkSchema(validators.loginValidator()), authEndpoint.login);
 app.post("/auth/register", checkSchema(validators.loginValidator()), authEndpoint.register);
 app.post("/auth/recover", checkSchema(validators.emailValidation()), authEndpoint.recoverEmail);
 
+app.get("/view/user-rols", middlewares.jwtProtected, viewEndpoint.getUserRols);
+
+app.get("/user", middlewares.jwtProtected, userEndpoint.getUser);
 app.post(
   "/user/bind-new-user",
   middlewares.jwtProtected,
-  checkSchema(validators.notEmptyValidator("name", "lastName", "nickname", "birthday")), 
-  user.bindNewUser
+  // NOTE: Por alguna razon el validator no funciona con forms, es como que el body-parser no trabaja pero en cuanto lo invoca
+  // el multer hace el parse y ya funciona el validator. El workaround que se me ocurrió, llamar a multer siempre que trabaje
+  // con forms aunque no haga falta cargar nada, multer tiene upload.none() y llamarlo soluciona el problema
+  upload.single('image'), 
+  // upload.none(),
+  checkSchema(validators.notEmptyValidator("names", "lastNames", "nickname", "birthday", "rol")), 
+  userEndpoint.bindNewUser
 );
 app.use(middlewares.notFound);
 

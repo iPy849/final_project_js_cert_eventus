@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type IUser from '@/api/type';
+import type {IUser, IJWTToken} from '@/type';
 import utils from "../utils";
 
 export const useAppStore = defineStore('appStore', {
@@ -32,9 +32,29 @@ export const useAppStore = defineStore('appStore', {
 
 export const useUserStore = defineStore('userStore', {
     state: () => ({
-        authToken: "" as string,
-        userRegistrationInfo: null as IUser,
+        authToken: null as IJWTToken,
+        userInfo: null as IUser,
     }),
+    actions: {
+        setUser(rawToken: string ): IJWTToken {
+            const token = utils.SetAuthToken(rawToken);
+            this.authToken = token;
+        },
+        getUser(): IJWTToken | null{
+            const token = utils.GetAuthObjectToken()
+            if(!token) {
+                this.deleteUser();
+                return null;
+            } else if (!this.authToken) {
+                this.authToken = token;
+            }
+            return this.authToken;
+        },
+        deleteUser(){
+            this.authToken = null;
+            document.cookie = `${import.meta.env.VITE_AUTH_COOKIE_NAME}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        },
+    },
     getters: {
         isAuthenticated(state){
             return !!state.authToken

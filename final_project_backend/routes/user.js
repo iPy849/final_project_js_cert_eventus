@@ -1,9 +1,7 @@
-const jwt = require("jsonwebtoken");
 const { getMongoConnection } = require("../mongo");
 const { validationResult } = require("express-validator");
-const bcrypt = require("bcryptjs");
 const utils = require("./utils");
-
+const { ObjectId } = require("mongodb");
 
 /**
  * @swagger
@@ -29,6 +27,8 @@ const utils = require("./utils");
  *                      type: string
  *                    birthday:
  *                      type: string
+ *                    image:
+ *                      type: File
  *        responses:
  *          200:
  *            description: Información aceptada
@@ -40,19 +40,40 @@ const bindNewUser = async (req, res) => {
   if (!errs.isEmpty()) {
     return res.send({ errors: errs.array() });
   }
-
   const mongo = await getMongoConnection();
-  const { email, password } = req.body;
-  const users = await mongo.collection("Users").find({ email }).toArray();
-  for (const user of users) {
-    if (bcrypt.compareSync(password, user.password)) {
-      const token = GenerateToken(user._id);
-      return res.json({ token });
-    }
+  const query = { _id: new ObjectId(req._id) };
+  const update = {
+    $set: { ...req.body, profileImage: req.file ? req.file.filename : null },
+  };
+  const result = await mongo.collection("Users").updateOne(query, update);
+  if (result) {
+    return res.sendStatus(200);
+  } else {
+    return res.sendStatus(400);
   }
-  return res.sendStatus(401);
+};
+
+const getUser = async (req, res) => {
+  const mongo = await getMongoConnection();
+  const options = {
+    projection: {
+      _id: 0,
+      email: 1,
+      names: 1,
+      lastNames: 1,
+      nickname: 1,
+      birthday: 1,
+      rol: 1,
+      profileImage: 1,
+    },
+  };
+  const user = await mongo
+    .collection("Users")
+    .findOne({ _id: new ObjectId(req._id) }, options);
+  return res.json(user);
 };
 
 module.exports = {
   bindNewUser,
+  getUser,
 };

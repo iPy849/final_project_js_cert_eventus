@@ -1,84 +1,86 @@
 <template>
-  <header class="sticky top-0 z-50">
-    <section class="
-        w-full
-        bg-primary
-        text-center
-        p-3
-        flex
-        justify-between
-        items-center
-        gap-3
-        text-dark
-        flex-col
-        md:flex-row
-        shadow-md
-    ">
+  <header v-if="$route.name !== 'UserSetup'" class="sticky top-0 z-50">
+    <section
+      class="w-full bg-primary text-center p-3 flex justify-between items-center gap-3 text-dark flex-col md:flex-row shadow-md"
+    >
       <!-- Brand -->
-      <div class="flex justify-around items-center w-full md:w-fit" @click="$router.push('/')">
+      <div
+        class="flex justify-around items-center w-full md:w-fit cursor-pointer"
+        @click="$router.push('/')"
+      >
         <div class="flex items-center">
           <h1 class="text-3xl mr-3">{{ brandName }}</h1>
           <div class="rounded-full h-8 w-8 bg-light"></div>
         </div>
-        <NavBarUserComponent v-if="userStore.isAuthenticated" :user-name="user" class="md:hidden self-end" />
+        <NavBarUserComponent
+          v-if="userStore.isAuthenticated"
+          :user-name="user"
+          class="md:hidden self-end"
+        />
       </div>
 
-      <div v-if="$route.name !== 'Terms'">
-        <!-- Search TODO: Ajustar search bar para JWT-->
-        <form @submit.prevent="HandleSearch" v-if="userStore.isAuthenticated" class="
-          flex
-          items-center
-          gap-1
-          px-3
-          py-2
-          bg-light
-          rounded-full
-          shadow-md
-          md:w-1/2
-          w-full
-        ">
-          <input type="text" class="outline-none w-full" placeholder="¿Qué evento estás buscando?" v-model="searchParams" />
-          <button type="submit">
-            <Icon class="w-auto h-6" icon="tabler:search" />
-          </button>
-        </form>
+      <form
+        @submit.prevent="HandleSearch"
+        v-if="userStore.isAuthenticated"
+        class="flex items-center gap-1 px-3 py-2 bg-light rounded-full shadow-md md:w-1/2 w-full"
+      >
+        <input
+          type="text"
+          class="border-none focus:outline-0 caret-transparent w-full"
+          placeholder="¿Qué evento estás buscando?"
+          v-model="searchParams"
+        />
+        <button type="submit">
+          <Icon class="w-auto h-6" icon="tabler:search" />
+        </button>
+      </form>
 
-        <!-- User -->
-        <NavBarUserComponent v-if="userStore.isAuthenticated" :user-name="user" class="hidden md:flex" />
-        <!-- Sub navigation -->
-        <section v-if="userStore.isAuthenticated" class="bg-secondary p-3 hidden md:block">
-          <ul class="flex gap-4 text-light underline text-sm">
-            <li>Mis boletos</li>
-            <li>Mis eventos</li>
-            <li>Se acerca el día para...</li>
-            <li>Próximos eventos</li>
-          </ul>
-        </section>
-        <!-- No user navbar -->
-        <nav class="w-fit" v-else>
-          <ul class="list-none flex items-center gap-4 text-base">
-            <li class="flex items-center gap-2">
-              <a href="#nextEvents">Próximos eventos</a>
-              <Icon class="w-auto h-6" icon="tabler:calendar-event" />
-            </li>
-            <li class="flex items-center gap-2">
-              <a href="#contact">Contacto</a>
-              <Icon class="w-auto h-6" icon="tabler:info-circle" />
-            </li>
-            <li class="flex items-center gap-2" @click="OpenLoginModal">
-              <LoginRegisterRecoverModalComponent v-if="appStore.overlayOpen"/>
-              <p>Ingresar</p>
-              <Icon class="w-auto h-6" icon="tabler:login"/>
-            </li>
-          </ul>
-        </nav>
+      <!-- User -->
+      <NavBarUserComponent
+        v-if="userStore.isAuthenticated"
+        :user-name="user"
+        class="hidden md:flex"
+      />
+      <!-- No user navbar -->
+      <div v-if="!userStore.isAuthenticated">
+      <nav class="w-fit" v-if="$route.name !== 'Terms'">
+        <ul class="list-none flex items-center gap-4 text-base cursor-pointer">
+          <li class="flex items-center gap-2">
+            <a href="#nextEvents">Próximos eventos</a>
+            <Icon class="w-auto h-6" icon="tabler:calendar-event" />
+          </li>
+          <li class="flex items-center gap-2">
+            <a href="#contact">Contacto</a>
+            <Icon class="w-auto h-6" icon="tabler:info-circle" />
+          </li>
+          <li class="flex items-center gap-2" @click="OpenLoginModal">
+            <LoginRegisterRecoverModalComponent v-if="appStore.overlayOpen" />
+            <p>Ingresar</p>
+            <Icon class="w-auto h-6" icon="tabler:login" />
+          </li>
+        </ul>
+      </nav>
+      <div v-else >
+        <RouterLink
+          :to="{ name: 'Landing' }"
+          class="text-xl underline"
+          >Regresar a página de inicio</RouterLink
+        >
       </div>
-      <div v-else>
-        <RouterLink :to="{name: 'Landing'}" class="text-xl underline hover:text-secondary">Regresar a página de inicio</RouterLink>
-      </div>
+    </div>
     </section>
-
-
+    <!-- Sub navigation -->
+    <section
+      v-if="userStore.isAuthenticated"
+      class="bg-secondary p-3 hidden md:block"
+    >
+      <ul class="flex gap-4 text-light underline text-sm">
+        <li>Mis boletos</li>
+        <li>Mis eventos</li>
+        <li>Se acerca el día para...</li>
+        <li>Próximos eventos</li>
+      </ul>
+    </section>
   </header>
 </template>
 
@@ -101,8 +103,8 @@ export default defineComponent({
   },
   data() {
     return {
-      searchParams: '',
-      user: 'alejandro',
+      searchParams: "",
+      user: "alejandro",
       isUserOptionOpen: false,
       isLoginModalOpen: false,
     };
@@ -110,7 +112,7 @@ export default defineComponent({
   methods: {
     HandleSearch() {
       console.log("Handle search", this.$data.searchParams);
-      this.$data.searchParams = '';
+      this.$data.searchParams = "";
     },
     OpenLoginModal() {
       this.appStore.openOverlay();
@@ -122,7 +124,7 @@ export default defineComponent({
 
 <style lang="scss">
 @layer navbar {
-  nav>ul>li {
+  nav > ul > li {
     @apply relative p-1;
 
     &::after {

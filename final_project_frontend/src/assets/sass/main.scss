@@ -30,6 +30,22 @@
     @apply w-0 h-0 border-b-8 border-b-transparent border-t-8 border-t-transparent border-l-8 border-l-light;
   }
 
+  .dark-arrow-up {
+    @apply w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-8 border-b-dark;
+  }
+
+  .dark-arrow-down {
+    @apply w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-t-8 border-t-dark;
+  }
+
+  .dark-arrow-left {
+    @apply w-0 h-0 border-b-8 border-b-transparent border-t-8 border-t-transparent border-r-8 border-r-dark;
+  }
+
+  .dark-arrow-right {
+    @apply w-0 h-0 border-b-8 border-b-transparent border-t-8 border-t-transparent border-l-8 border-l-dark;
+  }
+
   .button {
     @apply border-2 border-secondary px-4 py-2 rounded text-sm md:text-lg w-fit hover:bg-secondary hover:text-light;
   }
