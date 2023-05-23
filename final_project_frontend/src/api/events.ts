@@ -1,24 +1,22 @@
 import { IEvent } from '@/types'
+import { AxiosResponse } from "axios";
+import axiosInstance from "./axios";
 
-function GetHottestEvent(): IEvent {
-    // axiosInstance.get()
-    return {
-        eventName: "Nombre del evento",
-        eventPlace: "Lugar del evento",
-        eventImage: "/img/landing_hero.jpg",
-        eventDatetime: new Date(Date.now()),
-    }
+
+function GetHottestEvent(): Promise<AxiosResponse> {
+    return axiosInstance().get("/view/hottest");
 }
 
-function GetNextEvents(n: number): IEvent[] {
-    const result: IEvent[] = [];
-    for (let i = 0; i < n; i++) {
-        result.push(GetHottestEvent())
-    }
-    return result;
+function GetNextEvents(offset: number = 0, limit: number = 9): Promise<AxiosResponse> {
+  return axiosInstance().get(`/view/upcoming?o=${offset}&l=${limit}`);
+}
+
+function GetCloseDateEvents(): Promise<AxiosResponse> {
+    return axiosInstance().get("/view/closeDates");
 }
 
 export default {
     GetHottestEvent,
     GetNextEvents,
+    GetCloseDateEvents
 }

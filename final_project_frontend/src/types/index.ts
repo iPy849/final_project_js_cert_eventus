@@ -2,8 +2,10 @@
 export interface IEvent {
     eventName: String,
     eventPlace: String,
-    eventImage: String,
-    eventDatetime: Date,
+    eventImage: String[],
+    eventDate: Date,
+    eventCapacity: Number,
+    eventDescription: String,
 }
 
 type EventFilter = "all" | "near" | "next" | "userAdquired" | "organizer" | "search";

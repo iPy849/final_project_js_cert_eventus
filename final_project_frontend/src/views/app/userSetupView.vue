@@ -20,7 +20,7 @@
           :title="'Carga tu imagen de perfil'"
           :isImage="true"
           :maxFiles="1"
-          :extensions="['png', 'jpeg']"
+          :extensions="['png', 'jpeg', 'jpg']"
           v-model="image"
         />
       </div>
@@ -129,7 +129,7 @@ export default defineComponent({
         names: this.names,
         lastNames: this.lastNames,
         nickname: this.nickname,
-        birthday: this.birthday,
+        birthday: new Date(this.birthday),
         rol: this.rol,
         image: this.image[0] ?? null
       };

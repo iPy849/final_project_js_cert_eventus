@@ -205,9 +205,11 @@ export default defineComponent({
       }
       this.appStore.showSpinner();
       authApi
-        .Register(this.loginEmailForm, this.loginPasswordForm)
+        .Register(this.registerEmailForm, this.registerPasswordForm)
         .then((response: Object) => {
-          this.userStore.setUser(response.data.token);          
+          console.log(response);
+          
+          this.userStore.setUser(response.data.token);
           this.$router.push({ name: "UserSetup" });
         })
         .catch((err: Object) => {

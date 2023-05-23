@@ -4,13 +4,8 @@ import { AxiosResponse } from "axios";
 import axiosInstance from "./axios";
 
 // NOTE: Recupera la información del usuario basado en su jwt token
-function GetUserInfo(): IUser {
-  return {
-    name: "Alejandro",
-    lastName: "Ortega",
-    birthday: new Date(1999, 3, 13),
-    imageUrl: "/img/landing_hero.jpg",
-  };
+function GetUserInfo(): Promise<AxiosResponse> {
+  return axiosInstance().get("/user");
 }
 
 interface IUpsertUser {

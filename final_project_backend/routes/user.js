@@ -27,6 +27,8 @@ const { ObjectId } = require("mongodb");
  *                      type: string
  *                    birthday:
  *                      type: string
+ *                    rol:
+ *                      type: string
  *                    image:
  *                      type: File
  *        responses:
@@ -42,8 +44,10 @@ const bindNewUser = async (req, res) => {
   }
   const mongo = await getMongoConnection();
   const query = { _id: new ObjectId(req._id) };
+  const data = { ...req.body }
+  data.birthday = new Date(data.birthday);
   const update = {
-    $set: { ...req.body, profileImage: req.file ? req.file.filename : null },
+    $set: { ...data, profileImage: req.file ? req.file.filename : null, subscribedTo: [] },
   };
   const result = await mongo.collection("Users").updateOne(query, update);
   if (result) {
@@ -58,13 +62,7 @@ const getUser = async (req, res) => {
   const options = {
     projection: {
       _id: 0,
-      email: 1,
-      names: 1,
-      lastNames: 1,
-      nickname: 1,
-      birthday: 1,
-      rol: 1,
-      profileImage: 1,
+      password: 0,
     },
   };
   const user = await mongo

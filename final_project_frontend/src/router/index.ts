@@ -20,9 +20,18 @@ const routes = [
   {
     path: "/app",
     name: "App",
-    component: () => import("@/views/app/mainView.vue"),
+    component: () => import("@/views/app/containerView.vue"),
     children: [
-
+      {
+        path: "main",
+        name: "Main",
+        component: () => import("@/views/app/mainView.vue"),
+      },
+      {
+        path: '/search',
+        name: "Search",
+        component: () => import("@/views/app/searchView.vue"),
+      }
     ],
   },
   {
@@ -39,6 +48,7 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const userStore = useUserStore();
+
 
   if(to.name === "Landing" && userStore.authToken){
     return {name: "App"};

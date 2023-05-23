@@ -26,7 +26,7 @@
       >
         <input
           type="text"
-          class="border-none focus:outline-0 caret-transparent w-full"
+          class="border-none w-full focus:ring-transparent focus:border-transparent"
           placeholder="¿Qué evento estás buscando?"
           v-model="searchParams"
         />
@@ -46,11 +46,11 @@
       <nav class="w-fit" v-if="$route.name !== 'Terms'">
         <ul class="list-none flex items-center gap-4 text-base cursor-pointer">
           <li class="flex items-center gap-2">
-            <a href="#nextEvents">Próximos eventos</a>
+            <RouterLink :to="{name: 'Search'}">Próximos eventos</RouterLink>
             <Icon class="w-auto h-6" icon="tabler:calendar-event" />
           </li>
           <li class="flex items-center gap-2">
-            <a href="#contact">Contacto</a>
+            <RouterLink :to="{name: 'Search'}">Contacto</RouterLink>
             <Icon class="w-auto h-6" icon="tabler:info-circle" />
           </li>
           <li class="flex items-center gap-2" @click="OpenLoginModal">
@@ -75,10 +75,10 @@
       class="bg-secondary p-3 hidden md:block"
     >
       <ul class="flex gap-4 text-light underline text-sm">
-        <li>Mis boletos</li>
-        <li>Mis eventos</li>
-        <li>Se acerca el día para...</li>
-        <li>Próximos eventos</li>
+        <li><RouterLink :to="{name: 'Search'}">Mis boletos</RouterLink></li>
+        <li><RouterLink :to="{name: 'Search'}">Mis eventos</RouterLink></li>
+        <li><RouterLink :to="{name: 'Search'}">Se acerca el día para...</RouterLink></li>
+        <li><RouterLink :to="{name: 'Search'}">Próximos eventos</RouterLink></li>
       </ul>
     </section>
   </header>

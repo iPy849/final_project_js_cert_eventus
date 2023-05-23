@@ -111,6 +111,7 @@ const register = async (req, res) => {
 
   const mongo = await getMongoConnection();
   if ((await mongo.collection("Users").countDocuments({ email })) !== 0) {
+    console.log((await mongo.collection("Users").countDocuments({ email })), email);
     const errRes = utils.errorResponseTemplate;
     errRes.message = "Ya existe un usuario con ese correo electrónico";
     return res.status(409).json(errRes);
