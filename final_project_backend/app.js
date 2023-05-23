@@ -89,8 +89,10 @@ app.post(
   ),
   userEndpoint.bindNewUser
 );
+app.get("/user/events", middlewares.jwtProtected, eventEndpoint.getAdquiredEvents);
 
 // Event
+app.get("/event/search", eventEndpoint.getEventByName);
 app.get(
   "/event/subscribe/:eventId",
   middlewares.jwtProtected,

@@ -14,12 +14,14 @@
   <section class="pt-0">
     <button
       class="block p-2 m-auto border-2 border-primary rounded-full text-primary hover:bg-primary hover:text-dark shadow"
+      @click="$router.push({ name: 'Search', query: { filter: 'userAdquired' } })"
     >
       Consulta tus boletos adquiridos
     </button>
   </section>
   <button
     v-if="userStore.userInfo?.rol !== 'Usuario'"
+    @click="$router.push({name: 'Search', query:{filter: 'userAdquired'}})"
     class="p-4 rounded-full fixed bottom-4 right-4 bg-primary border-2 border-transparent hover:border-secondary text-light hover:text-secondary shadow-sm shadow-gray text-6xl font aspect-square flex items-center justify-center"
   >
     +

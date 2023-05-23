@@ -8,7 +8,6 @@ export default defineComponent({
   mixins: [controlStateMixin],
   created() {
     this.userStore.getOrUpdateUserInfo();
-    this.$router.push({name: "Main"});
   },
 });
 </script>

@@ -15,8 +15,14 @@ function GetCloseDateEvents(): Promise<AxiosResponse> {
     return axiosInstance().get("/view/closeDates");
 }
 
+function GetEventByName(keyword: string): Promise<AxiosResponse> {
+    return axiosInstance().get("/event/search?q="+keyword);
+
+}
+
 export default {
     GetHottestEvent,
     GetNextEvents,
-    GetCloseDateEvents
+    GetCloseDateEvents,
+    GetEventByName
 }

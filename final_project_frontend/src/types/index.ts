@@ -8,8 +8,6 @@ export interface IEvent {
     eventDescription: String,
 }
 
-type EventFilter = "all" | "near" | "next" | "userAdquired" | "organizer" | "search";
-
 export interface IEventListRequest {
     limit: Number,
     filter: EventFilter,

@@ -22,10 +22,27 @@
       class="bg-light rounded-bl-lg rounded-br-lg rounded-tl-lg w-[200%] md:w-[200%] h-fit absolute top-full right-0 text-dark text-start border-2 border-secondary p-1 font-bold"
     >
       <div class="block md:hidden border-b-2 border-secondary">
-        <p class="hover:bg-gray rounded m-2">Mis boletos</p>
-        <p class="hover:bg-gray rounded m-2">Mis eventos</p>
-        <p class="hover:bg-gray rounded m-2">Se acerca el día para...</p>
-        <p class="hover:bg-gray rounded m-2">Próximos eventos</p>
+        <p><RouterLink
+          :to="{ name: 'Search', query: { filter: 'userAdquired' } }"
+          class="hover:bg-gray rounded m-2"
+          >Mis boletos</RouterLink
+        ></p>
+        <p><RouterLink
+          :to="{ name: 'Search', query: { filter: 'own' } }"
+          class="hover:bg-gray rounded m-2"
+          v-if="userStore.userInfo?.rol !== 'Usuario'"
+          >Mis eventos</RouterLink
+        ></p>
+        <p><RouterLink
+          :to="{ name: 'Search', query: { filter: 'nextDays' } }"
+          class="hover:bg-gray rounded m-2"
+          >Se acerca el día para...</RouterLink
+        ></p>
+        <p><RouterLink
+          :to="{ name: 'Search', query: { filter: 'upcoming' } }"
+          class="hover:bg-gray rounded m-2"
+          >Próximos eventos</RouterLink
+        ></p>
       </div>
       <div>
         <p class="hover:bg-gray rounded m-2">Administrar opciones de usuario</p>
@@ -62,8 +79,10 @@ export default defineComponent({
   },
   computed: {
     profileImg() {
-        return `${import.meta.env.VITE_BACKEND_MEDIA_URL}/${this.userStore.userInfo.profileImage}`;
-    }
-  }
+      return `${import.meta.env.VITE_BACKEND_MEDIA_URL}/${
+        this.userStore.userInfo.profileImage
+      }`;
+    },
+  },
 });
 </script>

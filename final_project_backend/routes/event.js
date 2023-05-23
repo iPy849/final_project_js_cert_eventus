@@ -223,12 +223,41 @@ const getCloseDateEvents = async (req, res) => {
     },
     { $match: { dayDiff: { $lte: 7 } } },
   ];
-  const closeDateEvents = await mongo.collection("Events").aggregate(pipeline).toArray();
-  if(!closeDateEvents) {
+  const closeDateEvents = await mongo
+    .collection("Events")
+    .aggregate(pipeline)
+    .toArray();
+  if (!closeDateEvents) {
     return req.sendStatus(400);
   } else {
-    return res.json(closeDateEvents)
+    return res.json(closeDateEvents);
   }
+};
+
+const getAdquiredEvents = async (req, res) => {
+  const mongo = await getMongoConnection();
+  const pipeline = [
+    { $match: { _id: new ObjectId(req._id) } },
+    { $project: { _id: 0, subscribedTo: 1 } },
+  ];
+  const subscribedEventsIds = await mongo
+  .collection("Users")
+  .aggregate(pipeline)
+  .toArray();
+  if(!subscribedEventsIds){
+    return res.sendStatus(400);
+  }
+  const searchEvents = subscribedEventsIds[0].subscribedTo.map(v => new ObjectId(v));
+  const query =  { _id : { $in : searchEvents} }
+  const subscribedEvents = await mongo.collection("Events").find(query).toArray();
+  return res.json(subscribedEvents);
+};
+
+const getEventByName = async (req, res) => {
+  const mongo = await getMongoConnection();
+  const query =  { name : { $regex : req.query.q || ""} }
+  const results = await mongo.collection("Events").find(query).toArray();
+  return res.json(results);
 };
 
 module.exports = {
@@ -240,4 +269,6 @@ module.exports = {
   getUpcomingEvents,
   getHottestEvent,
   getCloseDateEvents,
+  getAdquiredEvents,
+  getEventByName
 };

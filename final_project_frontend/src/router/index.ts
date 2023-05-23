@@ -28,9 +28,16 @@ const routes = [
         component: () => import("@/views/app/mainView.vue"),
       },
       {
-        path: '/search',
+        path: 'search',
         name: "Search",
         component: () => import("@/views/app/searchView.vue"),
+        beforeEnter: (to) => {
+          const filter = to.query.filter;
+          const validFilters=["nextDays", "upcoming", "userAdquired", "search", "own"];
+          if(validFilters.indexOf(filter) === -1 ){
+            return {name: "Search", query: {filter: "search", q: to.query.filter}}
+          }
+        },
       }
     ],
   },
@@ -52,6 +59,12 @@ router.beforeEach((to) => {
 
   if(to.name === "Landing" && userStore.authToken){
     return {name: "App"};
+  }
+
+  // Redirección a Main
+  if(to.name === "App"){
+    return {name: "Main"};
+
   }
 
   // Path protegidos

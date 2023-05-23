@@ -8,6 +8,10 @@ function GetUserInfo(): Promise<AxiosResponse> {
   return axiosInstance().get("/user");
 }
 
+function GetUserEvents(): Promise<AxiosResponse> {
+  return axiosInstance().get("/user/events");
+}
+
 interface IUpsertUser {
   names: string,
   lastNames: string,
@@ -33,4 +37,5 @@ function UpsertUserInfo(userInfo: IUpsertUser): Promise<AxiosResponse> {
 export default {
   GetUserInfo,
   UpsertUserInfo,
+  GetUserEvents
 };

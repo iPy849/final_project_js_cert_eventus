@@ -43,31 +43,31 @@
       />
       <!-- No user navbar -->
       <div v-if="!userStore.isAuthenticated">
-      <nav class="w-fit" v-if="$route.name !== 'Terms'">
-        <ul class="list-none flex items-center gap-4 text-base cursor-pointer">
-          <li class="flex items-center gap-2">
-            <RouterLink :to="{name: 'Search'}">Próximos eventos</RouterLink>
-            <Icon class="w-auto h-6" icon="tabler:calendar-event" />
-          </li>
-          <li class="flex items-center gap-2">
-            <RouterLink :to="{name: 'Search'}">Contacto</RouterLink>
-            <Icon class="w-auto h-6" icon="tabler:info-circle" />
-          </li>
-          <li class="flex items-center gap-2" @click="OpenLoginModal">
-            <LoginRegisterRecoverModalComponent v-if="appStore.overlayOpen" />
-            <p>Ingresar</p>
-            <Icon class="w-auto h-6" icon="tabler:login" />
-          </li>
-        </ul>
-      </nav>
-      <div v-else >
-        <RouterLink
-          :to="{ name: 'Landing' }"
-          class="text-xl underline"
-          >Regresar a página de inicio</RouterLink
-        >
+        <nav class="w-fit" v-if="$route.name !== 'Terms'">
+          <ul
+            class="list-none flex items-center gap-4 text-base cursor-pointer"
+          >
+            <li class="flex items-center gap-2">
+              <RouterLink :to="{ name: 'Search' }">Próximos eventos</RouterLink>
+              <Icon class="w-auto h-6" icon="tabler:calendar-event" />
+            </li>
+            <li class="flex items-center gap-2">
+              <RouterLink :to="{ name: 'Search' }">Contacto</RouterLink>
+              <Icon class="w-auto h-6" icon="tabler:info-circle" />
+            </li>
+            <li class="flex items-center gap-2" @click="OpenLoginModal">
+              <LoginRegisterRecoverModalComponent v-if="appStore.overlayOpen" />
+              <p>Ingresar</p>
+              <Icon class="w-auto h-6" icon="tabler:login" />
+            </li>
+          </ul>
+        </nav>
+        <div v-else>
+          <RouterLink :to="{ name: 'Landing' }" class="text-xl underline"
+            >Regresar a página de inicio</RouterLink
+          >
+        </div>
       </div>
-    </div>
     </section>
     <!-- Sub navigation -->
     <section
@@ -75,10 +75,27 @@
       class="bg-secondary p-3 hidden md:block"
     >
       <ul class="flex gap-4 text-light underline text-sm">
-        <li><RouterLink :to="{name: 'Search'}">Mis boletos</RouterLink></li>
-        <li><RouterLink :to="{name: 'Search'}">Mis eventos</RouterLink></li>
-        <li><RouterLink :to="{name: 'Search'}">Se acerca el día para...</RouterLink></li>
-        <li><RouterLink :to="{name: 'Search'}">Próximos eventos</RouterLink></li>
+        <li>
+          <RouterLink
+            :to="{ name: 'Search', query: { filter: 'userAdquired' } }"
+            >Mis boletos</RouterLink
+          >
+        </li>
+        <li v-if="userStore.userInfo?.rol !== 'Usuario'">
+          <RouterLink :to="{ name: 'Search', query: { filter: 'own' } }"
+            >Mis eventos</RouterLink
+          >
+        </li>
+        <li>
+          <RouterLink :to="{ name: 'Search', query: { filter: 'nextDays' } }"
+            >Se acerca el día para...</RouterLink
+          >
+        </li>
+        <li>
+          <RouterLink :to="{ name: 'Search', query: { filter: 'upcoming' } }"
+            >Próximos eventos</RouterLink
+          >
+        </li>
       </ul>
     </section>
   </header>
@@ -111,8 +128,10 @@ export default defineComponent({
   },
   methods: {
     HandleSearch() {
-      console.log("Handle search", this.$data.searchParams);
-      this.$data.searchParams = "";
+      this.$router.push({
+        name: "Search",
+        query: { filter: "search", q: this.$data.searchParams },
+      });
     },
     OpenLoginModal() {
       this.appStore.openOverlay();
